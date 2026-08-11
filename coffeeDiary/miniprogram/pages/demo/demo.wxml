@@ -1,0 +1,17 @@
+<!--demo.wxml-->
+<view class="container">
+  <button bindtap="fetchData">点击请求后端接口</button>
+
+  <view wx:if="{{loading}}">请求中...</view>
+
+  <view wx:if="{{resData}}" class="result">
+    <text>接口返回：</text>
+    <view>code：{{resData.code}}</view>
+    <view>msg：{{resData.msg}}</view>
+    <view>data.name：{{resData.data.name}}</view>
+  </view>
+
+  <view wx:if="{{errorMsg}}" class="error">
+    错误：{{errorMsg}}
+  </view>
+</view>

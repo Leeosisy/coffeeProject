@@ -1,0 +1,26 @@
+<!--index.wxml-->
+<view class="page">
+  <view class="header">
+    <text class="greeting">今天喝了什么</text>
+    <view class="today-logo {{isToday ? 'active' : ''}}" bindtap="onGoToday">
+      <text class="today-num">{{todayDay}}</text>
+    </view>
+  </view>
+
+  <calendar class="calendar" value="{{selectedDate}}" bind:select="onDateSelect"></calendar>
+
+  <view class="action-card" bindtap="onAddRecord">
+    <view class="action-icon">+</view>
+    <view class="action-text">
+      <text class="action-title">记录一杯咖啡 | 茶</text>
+      <text class="action-desc">风味、品种、产地...</text>
+    </view>
+  </view>
+
+  <view class="section">
+    <text class="section-title">{{dateLabel}}的记录</text>
+    <view class="empty-tip">
+      <text>这一天还没有记录，点击上方开始记录</text>
+    </view>
+  </view>
+</view>
