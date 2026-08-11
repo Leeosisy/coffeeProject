@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/stats/stats",
     "pages/profile/profile",
+    "pages/record/record",
     "pages/demo/demo",
     "pages/logs/logs"
   ],

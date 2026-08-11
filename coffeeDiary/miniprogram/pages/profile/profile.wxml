@@ -1,11 +1,25 @@
 <view class="page">
   <view class="user-card">
-    <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+    <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+    </button>
     <view class="user-info">
-      <text class="nickname">{{nickName || '咖啡爱好者'}}</text>
-      <text class="desc">记录每一杯的美好时光</text>
+      <input
+        class="nickname-input"
+        type="nickname"
+        placeholder="填写昵称"
+        value="{{nickName}}"
+        maxlength="64"
+        bindblur="onNicknameBlur"
+        bindinput="onNicknameInput"
+      />
+      <text class="desc">{{isLoggedIn ? '已登录，可以开始记录咖啡' : '登录后同步你的咖啡日记'}}</text>
     </view>
   </view>
+
+  <button class="login-btn" loading="{{loggingIn}}" disabled="{{loggingIn}}" bindtap="onLogin">
+    {{isLoggedIn ? '更新资料' : '微信登录'}}
+  </button>
 
   <view class="menu-list">
     <view class="menu-item">

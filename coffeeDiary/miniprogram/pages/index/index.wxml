@@ -19,7 +19,30 @@
 
   <view class="section">
     <text class="section-title">{{dateLabel}}的记录</text>
-    <view class="empty-tip">
+
+    <view wx:if="{{loadingRecords}}" class="empty-tip">
+      <text>加载中...</text>
+    </view>
+
+    <block wx:elif="{{records.length}}">
+      <view class="record-item" wx:for="{{records}}" wx:key="id">
+        <view class="record-main">
+          <text class="record-name">{{item.coffee_name}}</text>
+          <text class="record-meta" wx:if="{{item.brand}}">{{item.brand}}</text>
+          <view class="record-tags">
+            <text wx:if="{{item.capacity}}" class="tag">{{item.capacity}}</text>
+            <text wx:if="{{item.sweetness}}" class="tag">{{item.sweetness}}</text>
+            <text wx:if="{{item.ice_level}}" class="tag">{{item.ice_level}}</text>
+          </view>
+        </view>
+        <view class="record-side">
+          <text wx:if="{{item.rating}}" class="record-rating">{{item.rating}}分</text>
+          <text wx:if="{{item.price}}" class="record-price">¥{{item.price}}</text>
+        </view>
+      </view>
+    </block>
+
+    <view wx:else class="empty-tip">
       <text>这一天还没有记录，点击上方开始记录</text>
     </view>
   </view>

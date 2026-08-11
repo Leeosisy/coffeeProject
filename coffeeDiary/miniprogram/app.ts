@@ -1,18 +1,23 @@
-// app.ts
+import { getStoredUser, ensureLogin } from './utils/auth'
+
 App<IAppOption>({
-  globalData: {},
+  globalData: {
+    userInfo: undefined,
+  },
   onLaunch() {
-    // 展示本地存储能力
     const logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
-    // 登录
-    wx.login({
-      success: res => {
-        console.log(res.code)
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-      },
+    const cached = getStoredUser()
+    if (cached) {
+      this.globalData.userInfo = cached as unknown as WechatMiniprogram.UserInfo
+      return
+    }
+
+    // 静默尝试登录，失败不影响使用（记录时再提示）
+    ensureLogin().catch(() => {
+      // ignore
     })
   },
 })

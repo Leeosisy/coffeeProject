@@ -9,7 +9,9 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME || 'coffee_db',
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  dateStrings: true,
+  timezone: '+08:00',
 })
 
 async function testConnection() {

@@ -15,6 +15,22 @@
   box-shadow: 0 12rpx 32rpx rgba(111, 78, 55, 0.25);
 }
 
+.avatar-btn {
+  padding: 0;
+  margin: 0;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+.avatar-btn::after {
+  border: none;
+}
+
 .avatar {
   width: 120rpx;
   height: 120rpx;
@@ -27,9 +43,12 @@
   margin-left: 28rpx;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
-.nickname {
+.nickname-input {
+  height: 48rpx;
   font-size: 36rpx;
   font-weight: 600;
   color: #ffffff;
@@ -39,6 +58,27 @@
   margin-top: 8rpx;
   font-size: 24rpx;
   color: rgba(255, 255, 255, 0.75);
+}
+
+.login-btn {
+  margin-bottom: 32rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 44rpx;
+  background: #ffffff;
+  color: #6f4e37;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 8rpx 24rpx rgba(111, 78, 55, 0.08);
+}
+
+.login-btn::after {
+  border: none;
+}
+
+.login-btn[disabled] {
+  opacity: 0.7;
 }
 
 .menu-list {
