@@ -16,6 +16,16 @@ interface CoffeeRecord {
   price: string | number | null
 }
 
+interface BrandItem {
+  id: number
+  name: string
+  logo_url: string | null
+}
+
+interface BrandListData {
+  list: BrandItem[]
+}
+
 Page({
   data: {
     recordId: 0,
@@ -23,6 +33,9 @@ Page({
     recordDate: formatDate(new Date()),
     coffeeName: '',
     brand: '',
+    brandInitial: '',
+    selectedBrandId: 0,
+    selectedBrandLogo: '',
     capacity: '',
     sweetness: '',
     iceLevel: '',
@@ -53,6 +66,43 @@ Page({
     wx.setNavigationBarTitle({ title: '记录咖啡' })
   },
 
+  applyBrand(brand: string, brandId?: number, logoUrl?: string | null) {
+    this.setData({
+      brand: brand || '',
+      brandInitial: brand ? brand.substring(0, 1) : '',
+      selectedBrandId: brandId || 0,
+      selectedBrandLogo: logoUrl || '',
+    })
+  },
+
+  async resolveBrandMeta(brandName: string) {
+    if (!brandName) {
+      this.applyBrand('')
+      return
+    }
+    try {
+      const resp = await request<BrandListData>({
+        url: '/api/brands',
+        method: 'GET',
+      })
+      const list = (resp.data && resp.data.list) || []
+      let matched: BrandItem | null = null
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].name === brandName) {
+          matched = list[i]
+          break
+        }
+      }
+      if (matched) {
+        this.applyBrand(matched.name, matched.id, matched.logo_url)
+      } else {
+        this.applyBrand(brandName)
+      }
+    } catch (_e) {
+      this.applyBrand(brandName)
+    }
+  },
+
   async loadRecord(id: number) {
     this.setData({ loading: true })
     try {
@@ -69,11 +119,11 @@ Page({
         typeof item.record_date === 'string'
           ? item.record_date.slice(0, 10)
           : formatDate(new Date(item.record_date))
+      const brand = item.brand || ''
 
       this.setData({
         recordDate,
         coffeeName: item.coffee_name || '',
-        brand: item.brand || '',
         capacity: item.capacity || '',
         sweetness: item.sweetness || '',
         iceLevel: item.ice_level || '',
@@ -82,6 +132,7 @@ Page({
         imageUrl: item.image_url || '',
         originalImageUrl: item.image_url || '',
       })
+      await this.resolveBrandMeta(brand)
     } catch (err) {
       const message = err && (err as Error).message ? (err as Error).message : '加载失败'
       wx.showToast({ title: message, icon: 'none' })
@@ -93,12 +144,20 @@ Page({
     }
   },
 
-  onCoffeeNameInput(e: WechatMiniprogram.Input) {
-    this.setData({ coffeeName: e.detail.value })
+  onOpenBrandSelect() {
+    const { selectedBrandId } = this.data
+    wx.navigateTo({
+      url: `/pages/brand-select/brand-select?brandId=${selectedBrandId || ''}`,
+      events: {
+        selectBrand: (payload: { id: number; name: string; logo?: string }) => {
+          this.applyBrand(payload.name, payload.id, payload.logo || '')
+        },
+      },
+    })
   },
 
-  onBrandInput(e: WechatMiniprogram.Input) {
-    this.setData({ brand: e.detail.value })
+  onCoffeeNameInput(e: WechatMiniprogram.Input) {
+    this.setData({ coffeeName: e.detail.value })
   },
 
   onPriceInput(e: WechatMiniprogram.Input) {
@@ -194,7 +253,6 @@ Page({
   resolvePersistImage(imageUrl: string, originalImageUrl: string) {
     if (!imageUrl) return null
     if (imageUrl.indexOf('https://') === 0) return imageUrl
-    // 编辑时未改图（临时路径不应覆盖原图）
     if (originalImageUrl && originalImageUrl.indexOf('https://') === 0) {
       return originalImageUrl
     }

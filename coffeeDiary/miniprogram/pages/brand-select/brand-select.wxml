@@ -1,0 +1,72 @@
+<view class="page">
+  <view class="search-bar">
+    <input
+      class="search-input"
+      placeholder="搜索品牌"
+      value="{{keyword}}"
+      confirm-type="search"
+      bindinput="onSearchInput"
+    />
+  </view>
+
+  <view wx:if="{{loading}}" class="empty">加载中...</view>
+
+  <view wx:elif="{{!displayGroups.length}}" class="empty">
+    <text>没有找到品牌</text>
+    <view wx:if="{{keyword}}" class="use-custom" bindtap="onUseCustom">使用「{{keyword}}」</view>
+  </view>
+
+  <block wx:else>
+    <scroll-view
+      class="brand-list"
+      scroll-y
+      scroll-with-animation
+      scroll-into-view="{{scrollIntoView}}"
+      enable-back-to-top
+    >
+      <view
+        wx:for="{{displayGroups}}"
+        wx:key="letter"
+        class="group"
+        id="{{item.anchor}}"
+      >
+        <view class="group-title">{{item.letter}}</view>
+        <view
+          wx:for="{{item.brands}}"
+          wx:for-item="brand"
+          wx:key="id"
+          class="brand-row {{selectedBrandId === brand.id ? 'active' : ''}}"
+          data-id="{{brand.id}}"
+          data-name="{{brand.name}}"
+          data-logo="{{brand.logo_url}}"
+          bindtap="onSelectBrand"
+        >
+          <image
+            wx:if="{{brand.logo_url}}"
+            class="brand-logo"
+            src="{{brand.logo_url}}"
+            mode="aspectFit"
+          ></image>
+          <view wx:else class="brand-logo brand-logo-fallback">
+            <text>{{brand.nameInitial}}</text>
+          </view>
+          <text class="brand-name">{{brand.name}}</text>
+          <text wx:if="{{selectedBrandId === brand.id}}" class="checked">✓</text>
+        </view>
+      </view>
+      <view class="list-bottom"></view>
+    </scroll-view>
+
+    <view class="index-bar">
+      <view
+        wx:for="{{indexLetters}}"
+        wx:key="*this"
+        class="index-letter {{activeLetter === item ? 'on' : ''}} {{letterEnabled[item] ? '' : 'disabled'}}"
+        data-letter="{{item}}"
+        bindtap="onTapLetter"
+      >{{item}}</view>
+    </view>
+
+    <view wx:if="{{toastLetter}}" class="letter-toast">{{toastLetter}}</view>
+  </block>
+</view>

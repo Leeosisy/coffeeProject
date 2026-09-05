@@ -80,6 +80,64 @@
   color: #3d2b1f;
 }
 
+.brand-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 80rpx;
+  padding: 16rpx 24rpx;
+  background: #f7f3ef;
+  border-radius: 16rpx;
+}
+
+.brand-picker:active {
+  opacity: 0.85;
+}
+
+.brand-picker-main {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
+}
+
+.brand-picker-logo {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 12rpx;
+  background: #ffffff;
+  flex-shrink: 0;
+  margin-right: 16rpx;
+}
+
+.brand-picker-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6f4e37;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.brand-picker-text {
+  font-size: 28rpx;
+  color: #3d2b1f;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brand-picker-text.placeholder {
+  color: #b5a89c;
+}
+
+.brand-picker-arrow {
+  margin-left: 12rpx;
+  font-size: 36rpx;
+  color: #c4b8ad;
+  line-height: 1;
+}
+
 .chip-row {
   display: flex;
   flex-wrap: wrap;

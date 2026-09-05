@@ -4,6 +4,7 @@
     "pages/stats/stats",
     "pages/profile/profile",
     "pages/record/record",
+    "pages/brand-select/brand-select",
     "pages/demo/demo",
     "pages/logs/logs"
   ],

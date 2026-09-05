@@ -5,6 +5,7 @@ require('dotenv').config()
 const { testConnection } = require('./config/db')
 const authRouter = require('./routes/auth')
 const coffeeRouter = require('./routes/coffee')
+const brandRouter = require('./routes/brand')
 
 const app = express()
 const port = Number(process.env.PORT) || 3000
@@ -27,6 +28,7 @@ app.get('/api/test', (req, res) => {
 
 app.use('/api/auth', authRouter)
 app.use('/api/coffee-records', coffeeRouter)
+app.use('/api/brands', brandRouter)
 
 function getLanIPs() {
   const nets = os.networkInterfaces()

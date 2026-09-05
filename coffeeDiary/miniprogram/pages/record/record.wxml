@@ -10,6 +10,27 @@
 
   <view class="form-card">
     <view class="field">
+      <text class="label">品牌</text>
+      <view class="brand-picker" bindtap="onOpenBrandSelect">
+        <view class="brand-picker-main">
+          <image
+            wx:if="{{selectedBrandLogo}}"
+            class="brand-picker-logo"
+            src="{{selectedBrandLogo}}"
+            mode="aspectFit"
+          ></image>
+          <view wx:elif="{{brand}}" class="brand-picker-logo brand-picker-fallback">
+            <text>{{brandInitial}}</text>
+          </view>
+          <text class="brand-picker-text {{brand ? '' : 'placeholder'}}">
+            {{brand || '点击选择品牌'}}
+          </text>
+        </view>
+        <text class="brand-picker-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="field">
       <text class="label">饮品名称 <text class="required">*</text></text>
       <input
         class="input"
@@ -17,17 +38,6 @@
         value="{{coffeeName}}"
         maxlength="100"
         bindinput="onCoffeeNameInput"
-      />
-    </view>
-
-    <view class="field">
-      <text class="label">品牌</text>
-      <input
-        class="input"
-        placeholder="例如：瑞幸 / 星巴克"
-        value="{{brand}}"
-        maxlength="100"
-        bindinput="onBrandInput"
       />
     </view>
 
