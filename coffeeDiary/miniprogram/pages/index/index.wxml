@@ -25,7 +25,13 @@
     </view>
 
     <block wx:elif="{{records.length}}">
-      <view class="record-item" wx:for="{{records}}" wx:key="id">
+      <view
+        class="record-item"
+        wx:for="{{records}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onEditRecord"
+      >
         <view class="record-main">
           <text class="record-name">{{item.coffee_name}}</text>
           <text class="record-meta" wx:if="{{item.brand}}">{{item.brand}}</text>
@@ -38,6 +44,7 @@
         <view class="record-side">
           <text wx:if="{{item.rating}}" class="record-rating">{{item.rating}}分</text>
           <text wx:if="{{item.price}}" class="record-price">¥{{item.price}}</text>
+          <text class="record-edit">编辑</text>
         </view>
       </view>
     </block>

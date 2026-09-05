@@ -16,6 +16,13 @@
   box-shadow: 0 4rpx 16rpx rgba(111, 78, 55, 0.06);
 }
 
+.date-info {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  min-width: 0;
+}
+
 .date-label {
   font-size: 28rpx;
   color: #9a8b7e;
@@ -25,6 +32,20 @@
   font-size: 30rpx;
   font-weight: 600;
   color: #3d2b1f;
+}
+
+.delete-btn {
+  flex-shrink: 0;
+  margin-left: 24rpx;
+  padding: 10rpx 24rpx;
+  font-size: 26rpx;
+  color: #c45c26;
+  background: rgba(196, 92, 38, 0.08);
+  border-radius: 12rpx;
+}
+
+.delete-btn:active {
+  opacity: 0.7;
 }
 
 .form-card {
@@ -152,4 +173,15 @@
 
 .save-btn[disabled] {
   opacity: 0.7;
+}
+
+.loading-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #9a8b7e;
 }

@@ -134,4 +134,12 @@ Page({
       })
     }
   },
+
+  onEditRecord(e: WechatMiniprogram.TouchEvent) {
+    const id = e.currentTarget.dataset.id
+    if (!id) return
+    wx.navigateTo({
+      url: `/pages/record/record?id=${id}`,
+    })
+  },
 })
