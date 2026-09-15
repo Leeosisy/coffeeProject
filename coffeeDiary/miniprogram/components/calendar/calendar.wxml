@@ -29,7 +29,7 @@
       data-date="{{item.date}}"
       bindtap="onSelectDay"
     >
-      <view class="day-inner {{item.isSelected ? 'selected' : ''}} {{item.isCurrentMonth ? '' : 'other-month'}} {{item.isToday && !item.isSelected ? 'today' : ''}}">
+      <view class="day-inner {{item.isSelected ? 'selected' : ''}} {{item.isCurrentMonth ? '' : 'other-month'}} {{item.isToday && !item.isSelected ? 'today' : ''}} {{item.hasRecord && !item.isSelected ? 'has-record' : ''}}">
         <text class="day-num">{{item.day}}</text>
         <view wx:if="{{item.isToday && !item.isSelected}}" class="today-dot"></view>
       </view>

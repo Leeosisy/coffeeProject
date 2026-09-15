@@ -65,6 +65,62 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/marked-dates', async (req, res) => {
+  try {
+    const { user_id, year, month } = req.query
+    if (!user_id || !year || !month) {
+      return res.status(400).json({
+        code: 400,
+        msg: 'user_id、year、month 为必填项',
+        data: null,
+      })
+    }
+
+    const y = Number(year)
+    const m = Number(month)
+    if (!y || !m || m < 1 || m > 12) {
+      return res.status(400).json({
+        code: 400,
+        msg: '年份或月份无效',
+        data: null,
+      })
+    }
+
+    const pad = (n) => (n < 10 ? `0${n}` : `${n}`)
+    // 覆盖日历可能显示的上月尾 / 下月头
+    const start = new Date(y, m - 1, 1)
+    start.setDate(start.getDate() - 7)
+    const end = new Date(y, m, 0)
+    end.setDate(end.getDate() + 14)
+
+    const startStr = `${start.getFullYear()}-${pad(start.getMonth() + 1)}-${pad(start.getDate())}`
+    const endStr = `${end.getFullYear()}-${pad(end.getMonth() + 1)}-${pad(end.getDate())}`
+
+    const [rows] = await pool.query(
+      `SELECT DISTINCT record_date
+       FROM coffee_record
+       WHERE user_id = ? AND record_date BETWEEN ? AND ?
+       ORDER BY record_date ASC`,
+      [String(user_id), startStr, endStr]
+    )
+
+    const dates = rows.map((row) => formatRecordDate(row.record_date))
+
+    res.json({
+      code: 200,
+      msg: '查询成功',
+      data: dates,
+    })
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      msg: '查询失败',
+      data: null,
+      error: err.message,
+    })
+  }
+})
+
 router.get('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id)

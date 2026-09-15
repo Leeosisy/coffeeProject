@@ -43,6 +43,9 @@ Page({
     isToday: true,
     records: [] as CoffeeRecord[],
     loadingRecords: false,
+    markedDates: [] as string[],
+    calendarYear: new Date().getFullYear(),
+    calendarMonth: new Date().getMonth() + 1,
   },
 
   onShow() {
@@ -50,15 +53,20 @@ Page({
       this.getTabBar().setData({ selected: 0 })
     }
     this.loadRecords()
+    this.loadMarkedDates(this.data.calendarYear, this.data.calendarMonth)
   },
 
   onGoToday() {
     const today = formatDate(new Date())
+    const year = new Date().getFullYear()
+    const month = new Date().getMonth() + 1
     this.setData({
       selectedDate: today,
       dateLabel: '今天',
       isToday: true,
       todayDay: new Date().getDate(),
+      calendarYear: year,
+      calendarMonth: month,
     })
 
     const calendar = this.selectComponent('.calendar')
@@ -66,6 +74,7 @@ Page({
       calendar.goToToday()
     }
     this.loadRecords(today)
+    this.loadMarkedDates(year, month)
   },
 
   onDateSelect(e: WechatMiniprogram.CustomEvent<{ date: string }>) {
@@ -77,6 +86,37 @@ Page({
       isToday: date === today,
     })
     this.loadRecords(date)
+  },
+
+  onMonthChange(e: WechatMiniprogram.CustomEvent<{ year: number; month: number }>) {
+    const { year, month } = e.detail
+    this.setData({
+      calendarYear: year,
+      calendarMonth: month,
+    })
+    this.loadMarkedDates(year, month)
+  },
+
+  async loadMarkedDates(year: number, month: number) {
+    const user = getStoredUser()
+    if (!user || !user.openid) {
+      this.setData({ markedDates: [] })
+      return
+    }
+
+    try {
+      const resp = await request<string[]>({
+        url: `/api/coffee-records/marked-dates?user_id=${encodeURIComponent(
+          user.openid
+        )}&year=${year}&month=${month}`,
+        method: 'GET',
+      })
+      if (resp.code === 200) {
+        this.setData({ markedDates: resp.data || [] })
+      }
+    } catch (_e) {
+      this.setData({ markedDates: [] })
+    }
   },
 
   async loadRecords(date?: string) {

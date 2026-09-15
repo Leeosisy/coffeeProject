@@ -214,9 +214,13 @@
 }
 
 .save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 40rpx;
   height: 96rpx;
-  line-height: 96rpx;
+  padding: 0;
+  line-height: 1;
   border-radius: 48rpx;
   background: linear-gradient(135deg, #6f4e37 0%, #8b6347 100%);
   color: #ffffff;

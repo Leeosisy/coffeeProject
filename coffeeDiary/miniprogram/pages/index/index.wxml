@@ -7,7 +7,13 @@
     </view>
   </view>
 
-  <calendar class="calendar" value="{{selectedDate}}" bind:select="onDateSelect"></calendar>
+  <calendar
+    class="calendar"
+    value="{{selectedDate}}"
+    markedDates="{{markedDates}}"
+    bind:select="onDateSelect"
+    bind:monthchange="onMonthChange"
+  ></calendar>
 
   <view class="action-card" bindtap="onAddRecord">
     <view class="action-icon">+</view>

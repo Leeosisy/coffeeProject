@@ -114,6 +114,28 @@
   font-weight: 600;
 }
 
+.day-inner.has-record {
+  background: #d9cfc4;
+}
+
+.day-inner.has-record .day-num {
+  color: #4a3426;
+  font-weight: 600;
+}
+
+.day-inner.has-record.other-month {
+  background: #ebe4dc;
+}
+
+.day-inner.has-record.other-month .day-num {
+  color: #8a7a6c;
+  font-weight: 500;
+}
+
+.day-inner.has-record.today .day-num {
+  color: #3d2b1f;
+}
+
 .today-dot {
   position: absolute;
   bottom: 10rpx;

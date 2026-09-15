@@ -4,6 +4,7 @@ export interface CalendarDay {
   isCurrentMonth: boolean
   isToday: boolean
   isSelected: boolean
+  hasRecord: boolean
 }
 
 const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`)
@@ -23,9 +24,15 @@ export const parseDate = (dateStr: string): Date => {
 export const buildCalendarDays = (
   year: number,
   month: number,
-  selectedDate: string
+  selectedDate: string,
+  markedDates: string[] = []
 ): CalendarDay[] => {
   const todayStr = formatDate(new Date())
+  const markedMap: Record<string, boolean> = {}
+  markedDates.forEach((d) => {
+    markedMap[d] = true
+  })
+
   const firstDay = new Date(year, month - 1, 1)
   const daysInMonth = new Date(year, month, 0).getDate()
   const startWeekday = firstDay.getDay()
@@ -43,6 +50,7 @@ export const buildCalendarDays = (
       isCurrentMonth: false,
       isToday: date === todayStr,
       isSelected: date === selectedDate,
+      hasRecord: Boolean(markedMap[date]),
     })
   }
 
@@ -54,6 +62,7 @@ export const buildCalendarDays = (
       isCurrentMonth: true,
       isToday: date === todayStr,
       isSelected: date === selectedDate,
+      hasRecord: Boolean(markedMap[date]),
     })
   }
 
@@ -68,6 +77,7 @@ export const buildCalendarDays = (
       isCurrentMonth: false,
       isToday: date === todayStr,
       isSelected: date === selectedDate,
+      hasRecord: Boolean(markedMap[date]),
     })
   }
 

@@ -10,6 +10,10 @@ Component({
       type: String,
       value: '',
     },
+    markedDates: {
+      type: Array,
+      value: [] as string[],
+    },
   },
 
   data: {
@@ -36,6 +40,7 @@ Component({
         selectedDate,
       })
       this.refreshDays()
+      this.emitMonthChange(year, month)
     },
   },
 
@@ -52,6 +57,7 @@ Component({
       ) {
         return
       }
+      const monthChanged = year !== this.data.year || month !== this.data.month
       this.setData({
         selectedDate: val,
         year,
@@ -59,15 +65,26 @@ Component({
         pickerValue: toPickerValue(year, month),
       })
       this.refreshDays()
+      if (monthChanged) {
+        this.emitMonthChange(year, month)
+      }
+    },
+    markedDates() {
+      this.refreshDays()
     },
   },
 
   methods: {
+    emitMonthChange(year: number, month: number) {
+      this.triggerEvent('monthchange', { year, month })
+    },
+
     goToToday() {
       const today = formatDate(new Date())
       const baseDate = parseDate(today)
       const year = baseDate.getFullYear()
       const month = baseDate.getMonth() + 1
+      const monthChanged = year !== this.data.year || month !== this.data.month
 
       this.setData({
         selectedDate: today,
@@ -77,12 +94,16 @@ Component({
       })
       this.refreshDays()
       this.triggerEvent('select', { date: today })
+      if (monthChanged) {
+        this.emitMonthChange(year, month)
+      }
     },
 
     refreshDays() {
       const { year, month, selectedDate } = this.data
+      const markedDates = (this.properties.markedDates || []) as string[]
       this.setData({
-        days: buildCalendarDays(year, month, selectedDate),
+        days: buildCalendarDays(year, month, selectedDate, markedDates),
       })
     },
 
@@ -93,6 +114,7 @@ Component({
         pickerValue: toPickerValue(year, month),
       })
       this.refreshDays()
+      this.emitMonthChange(year, month)
     },
 
     onPrevMonth() {
@@ -126,6 +148,7 @@ Component({
       const picked = parseDate(date)
       const year = picked.getFullYear()
       const month = picked.getMonth() + 1
+      const monthChanged = year !== this.data.year || month !== this.data.month
 
       this.setData({
         selectedDate: date,
@@ -135,6 +158,9 @@ Component({
       })
       this.refreshDays()
       this.triggerEvent('select', { date })
+      if (monthChanged) {
+        this.emitMonthChange(year, month)
+      }
     },
   },
 })
